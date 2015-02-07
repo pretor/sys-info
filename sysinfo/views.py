@@ -2,37 +2,29 @@ from django.http import HttpResponse
 from django.template.context import RequestContext
 from django.template.loader import get_template
 import json
+import os
 
 def home(request):
     template = get_template('index.html')
-    context = RequestContext(request,{})
+    context = RequestContext(request, {})
     return HttpResponse(template.render(context))
 
 
 def get(request):
-    core0 = request.GET.get('core0','0')
-    core1 = request.GET.get('core1','0')
-    core2 = request.GET.get('core2','0')
-    core3 = request.GET.get('core3','0')
-    core4 = request.GET.get('core4','0')
-    core5 = request.GET.get('core5','0')
-    core6 = request.GET.get('core6','0')
-    core7 = request.GET.get('core7','0')
-    file = open('sysinfofile.txt','wb')
-    file.write(bytes(core0 + '\n', 'UTF-8'))
-    file.write(bytes(core1 + '\n', 'UTF-8'))
-    file.write(bytes(core2 + '\n', 'UTF-8'))
-    file.write(bytes(core3 + '\n', 'UTF-8'))
-    file.write(bytes(core4 + '\n', 'UTF-8'))
-    file.write(bytes(core5 + '\n', 'UTF-8'))
-    file.write(bytes(core6 + '\n', 'UTF-8'))
-    file.write(bytes(core7 + '\n', 'UTF-8'))
+    listCorePercentage = request.GET.getlist('cpu[]', 0)
+    cpuBrand = request.GET.get('cpubrand',0)
+    memoryPercent = request.GET.get('memorypercent',0)
+    file = open('files/' +cpuBrand+'.txt', 'wb')
+    cpuInfo = {'cores': listCorePercentage, 'cpubrand': cpuBrand, 'memorypercent': memoryPercent}
+    file.write(bytes(json.dumps(cpuInfo), 'UTF-8'))
     file.close()
-    return HttpResponse(core0)
+    return HttpResponse(json.dumps(cpuInfo))
+
 def servejson(request):
-    cores = []
-    with open('sysinfofile.txt', 'r+') as file:
-        for line in file:
-            cores.append(line[:-1])
-    return HttpResponse(json.dumps(cores), content_type='application/json')
+    for filename in os.listdir('files'):
+         with open('files/'+filename, 'r+') as file:
+             jsonFromFile = file.read()
+    return HttpResponse(jsonFromFile, content_type='application/json')
+
+
 

@@ -14,8 +14,6 @@
     <!-- endbuild -->
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
 
-    <!-- build:css styles/main.css -->
-    <link rel="stylesheet" href="main.css">
     <!-- endbuild -->
 </head>
 <body>
@@ -30,61 +28,67 @@
     <main class="ui page grid">
         <div class="row">
             <div class="center aligned starter column">
-                <h1 class="ui header">Intel core i7 4700HQ</h1>
+                <h1 class="ui header" id="cpu-brand">cpu</h1>
                 <p>
-                    <div class="ui teal progress" id="core0">
+                    <div class="ui teal progress small" id="core0">
   <div class="bar">
-    <div class="progress"></div>
+    <div class="progress "></div>
   </div>
   <div class="label">core0</div>
 </div>
 
-    <div class="ui blue progress" id="core1">
+    <div class="ui blue progress small" id="core1">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core1</div>
 </div>
 
- <div class="ui green progress" id="core2">
+ <div class="ui green progress small" id="core2">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core2</div>
 </div>
 
- <div class="ui orange progress" id="core3">
+ <div class="ui orange progress small" id="core3">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core3</div>
 </div>
 
- <div class="ui red progress" id="core4">
+ <div class="ui red progress small" id="core4">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core4</div>
 </div>
- <div class="ui purple progress" id="core5">
+ <div class="ui purple progress small" id="core5">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core5</div>
 </div>
- <div class="ui yellow progress" id="core6">
+ <div class="ui yellow progress small" id="core6">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core6</div>
 </div>
- <div class="ui pink progress" id="core7">
+ <div class="ui pink progress small" id="core7">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core7</div>
 </div>
                 </p>
+                 <div class="ui black progress " id="memory-percent">
+  <div class="bar">
+    <div class="progress"></div>
+  </div>
+  <div class="label">Memory percentage</div>
+</div>
             </div>
         </div>
     </main>
@@ -98,10 +102,14 @@
     <script type="text/javascript">
         $(function() {
             function changeProgress(){          
-                $.getJSON("/json",{}, function( data ){ 
-                    $( data ).each(function( index ) {                        
-                         $('#core' + index).progress({                           
-                           percent: data[index]
+                $.getJSON("/json",{}, function( data ){
+                    $('#cpu-brand').text(data['cpubrand']);
+                    $('#memory-percent').progress({
+                           percent: data['memorypercent']
+                        });
+                    $( data['cores'] ).each(function( index ) {
+                         $('#core' + index).progress({
+                           percent: data['cores'][index]
                         });
                     });
                 });                                 
