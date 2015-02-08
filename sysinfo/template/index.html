@@ -177,7 +177,12 @@
                         });
                            }
                        else{
-                           $( '#sys1-core0' ).clone().prop({ id: "sys"+index+"-core"+coreIndex}).appendTo( "#cores-"+index );
+                           var coreAfter = parseInt(coreIndex)-1;
+                           $( '#sys1-core0' ).clone().prop({ id: "sys"+index+"-core"+coreIndex}).insertAfter('#sys'+index+'-core'+ coreAfter );
+                           $('#sys'+index+'-core' + coreIndex+' div:nth-child(2)').html('core'+coreIndex);
+                            $('#sys'+index+'-core' + coreIndex).progress({
+                           percent: data[index]['cores'][coreIndex]
+                        });
                        }
                     });
 
