@@ -21,9 +21,12 @@ def get(request):
     return HttpResponse(json.dumps(cpuInfo))
 
 def servejson(request):
+    sysInfos = []
     for filename in os.listdir('files'):
-         with open('files/'+filename, 'r+') as file:
-             jsonFromFile = file.read()
+        file = open('files/'+filename, 'r+')
+        sysInfos.append(json.loads(file.read()))
+        file.close()
+    jsonFromFile = json.dumps(sysInfos)
     return HttpResponse(jsonFromFile, content_type='application/json')
 
 

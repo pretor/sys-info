@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!doctype html>
 <html class="no-js">
 <head>
@@ -10,6 +11,8 @@
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.8.1/semantic.min.css">
+    {% comment %}<link rel="stylesheet" href="static/whhg-font/css/whhg.css">{% endcomment %}
+    <link rel="stylesheet" href="{% static "whhg-font/css/whhg.css" %}">
     <!-- endbower -->
     <!-- endbuild -->
     <link href='//fonts.googleapis.com/css?family=Open+Sans:400,700,300&subset=latin,vietnamese' rel='stylesheet' type='text/css'>
@@ -26,64 +29,117 @@
     </nav> <!-- end nav -->
 
     <main class="ui page grid">
-        <div class="row">
-            <div class="center aligned starter column">
-                <h1 class="ui header" id="cpu-brand">cpu</h1>
-                <p>
-                    <div class="ui teal progress small" id="core0">
+        <div class="row" id="sys0">
+            <div class="aligned starter column">
+
+                <span><i class="icon-cpu-processor"></i></span>
+                <span class="ui header" id="cpu-brand0">cpu</span>
+
+
+
+                    <p>
+                    <div class="ui teal progress small" id="sys0-core0">
   <div class="bar">
     <div class="progress "></div>
   </div>
   <div class="label">core0</div>
 </div>
 
-    <div class="ui blue progress small" id="core1">
+    <div class="ui blue progress small" id="sys0-core1">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core1</div>
 </div>
 
- <div class="ui green progress small" id="core2">
+ <div class="ui green progress small" id="sys0-core2">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core2</div>
 </div>
 
- <div class="ui orange progress small" id="core3">
+ <div class="ui orange progress small" id="sys0-core3">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core3</div>
 </div>
 
- <div class="ui red progress small" id="core4">
+
+                </p>
+
+
+                 <div class="ui black progress " id="memory-percent0">
+  <div class="bar">
+    <div class="progress"></div>
+  </div>
+  <div class="label">Memory percentage</div>
+</div>
+            </div>
+        </div>
+
+        <div class="row" id="sys1">
+            <div class="aligned starter column">
+                <span><i class="icon-cpu-processor"></i></span>
+                <span class="ui header" id="cpu-brand1">cpu</span>
+
+                <p>
+                    <div class="ui teal progress small" id="sys1-core0">
+  <div class="bar">
+    <div class="progress "></div>
+  </div>
+  <div class="label">core0</div>
+</div>
+
+    <div class="ui blue progress small" id="sys1-core1">
+  <div class="bar">
+    <div class="progress"></div>
+  </div>
+  <div class="label">core1</div>
+</div>
+
+ <div class="ui green progress small" id="sys1-core2">
+  <div class="bar">
+    <div class="progress"></div>
+  </div>
+  <div class="label">core2</div>
+</div>
+
+ <div class="ui orange progress small" id="sys1-core3">
+  <div class="bar">
+    <div class="progress"></div>
+  </div>
+  <div class="label">core3</div>
+</div>
+
+ <div class="ui red progress small" id="sys1-core4">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core4</div>
 </div>
- <div class="ui purple progress small" id="core5">
+ <div class="ui purple progress small" id="sys1-core5">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core5</div>
 </div>
- <div class="ui yellow progress small" id="core6">
+ <div class="ui yellow progress small" id="sys1-core6">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core6</div>
 </div>
- <div class="ui pink progress small" id="core7">
+ <div class="ui pink progress small" id="sys1-core7">
   <div class="bar">
     <div class="progress"></div>
   </div>
   <div class="label">core7</div>
 </div>
                 </p>
-                 <div class="ui black progress " id="memory-percent">
+
+                 <div class="ui black progress " id="memory-percent1">
   <div class="bar">
     <div class="progress"></div>
   </div>
@@ -103,7 +159,24 @@
         $(function() {
             function changeProgress(){          
                 $.getJSON("/json",{}, function( data ){
-                    $('#cpu-brand').text(data['cpubrand']);
+
+                    $( data ).each(function( index ) {
+
+                         $('#cpu-brand'+index).text(data[index]['cpubrand']);
+                        $('#memory-percent'+index).progress({
+                           percent: data[index]['memorypercent']
+                        });
+                   $( data[index]['cores'] ).each(function( coreIndex ) {
+                         $('#sys'+index+'-core' + coreIndex).progress({
+                           percent: data[index]['cores'][coreIndex]
+                        });
+                    });
+
+                    });
+                      });
+
+
+                    {% comment %}$('#cpu-brand').text(data['cpubrand']);
                     $('#memory-percent').progress({
                            percent: data['memorypercent']
                         });
@@ -111,11 +184,12 @@
                          $('#core' + index).progress({
                            percent: data['cores'][index]
                         });
-                    });
-                });                                 
+                    });{% endcomment %}
+
             }
             setInterval( changeProgress , 2000);         
         });
+
     </script>
 </body>
 </html>
