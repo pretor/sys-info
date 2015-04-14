@@ -12,13 +12,28 @@ def home(request):
 
 def get(request):
     listCorePercentage = request.GET.getlist('cpu[]', 0)
-    cpuBrand = request.GET.get('cpubrand',0)
-    memoryPercent = request.GET.get('memorypercent',0)
-    file = open('files/' +cpuBrand+'.txt', 'wb')
-    cpuInfo = {'cores': listCorePercentage, 'cpubrand': cpuBrand, 'memorypercent': memoryPercent}
+    cpuBrand = request.GET.get('cpubrand', 0)
+    memoryPercent = request.GET.get('memorypercent', 0)
+    memoryTotal = request.GET.get('memorytotal', 0)
+    gpuName = request.GET.get('gpuname', 0)
+    cpuTempCores = request.GET.getlist('cputempcores[]', 0)
+    platform = request.GET.get('platform', 0)
+    platformRelease = request.GET.get('platformrelease', 0)
+    platformName = request.GET.get('platformname', 0)
+    file = open('files/' + cpuBrand +'.txt', 'wb')
+    cpuInfo = {'cores': listCorePercentage,
+               'cpubrand': cpuBrand,
+               'memorypercent': memoryPercent,
+               'memorytotal': memoryTotal,
+               'gpuname': gpuName,
+               'cputempcores': cpuTempCores,
+               'platform': platform,
+               'platformrelease': platformRelease,
+               'platformname': platformName}
     file.write(bytes(json.dumps(cpuInfo), 'UTF-8'))
     file.close()
     return HttpResponse(json.dumps(cpuInfo))
+
 
 def servejson(request):
     sysInfos = []
