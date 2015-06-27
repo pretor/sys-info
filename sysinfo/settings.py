@@ -34,10 +34,12 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'registration',
     'sysinfo'
 )
 
@@ -77,6 +79,13 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+ACCOUNT_ACTIVATION_DAYS = 7  # One-week activation window; you may, of course, use a different value.
+REGISTRATION_AUTO_LOGIN = True  # Automatically log the usr in.
+SITE_ID = 1
+
+#EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+#EMAIL_FILE_PATH = 'tmp/email-messages/'
 
 
 # Static files (CSS, JavaScript, Images)
